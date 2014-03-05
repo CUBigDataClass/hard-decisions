@@ -72,7 +72,15 @@
       line-height: 20px;
     }
 
-
+    rect{
+      stroke-width:2;
+      stroke:#000;
+    }
+    rect:hover{
+      fill:white;
+      stroke-width:2;
+      stroke:#000;
+    }
   </style>
 </head>
 <body>
@@ -89,102 +97,124 @@
   </div><!--end wrapper-->
   <script type="text/javascript"> //start d3
     //var dataset = [4, 12];
+
+
+    // BEGIN JSON FUNCTION (anything that requires data needs to run in here)
     var dataset;
     d3.json("data.json", function(error, json) {
       if (error) {  //If error is not null, something went wrong.
           console.log(error);  //Log the error.
         } else {      //If no error, the file loaded correctly. Yay!
           console.log(json);}   //Log the data.
-    //});
+    
       dataset=json;
     
-    //inside .json
-    var w = 400;
-    var h = 400;
-    var barPadding = 3;
+            //inside .json
+            var w = 400;
+            var h = 400;
+            var barPadding = 3;
 
-    /*var xScale = d3.scale.ordinal()//for tooltip
-                .domain(d3.range(dataset.length))
-                .rangeRoundBands([0, w], 12);
+            //scales
+            /*var xScale = d3.scale.ordinal()//for tooltip
+                        .domain(d3.range(dataset.length))
+                        .rangeRoundBands([0, w], 12);
 
-    var yScale = d3.scale.linear()// for tooltip
-                .domain([0, d3.max(dataset)])
-                .range([0, h]);*/
-    
-    //Create SVG element
-    var svg = d3.select("#data")
-                .append("svg")
-                .attr("width", w)
-                .attr("height", h);
-    
-    svg.selectAll("rect")
-        .data(dataset)
-        .enter()
-        .append("rect")
-        .attr("x", function(d, i) {
-            return i * (w/2) - barPadding;
-        })
-        .attr("y", function(d) {
-            return h - ( d.clicks*3 );  //Height minus data value
-        })
-        .attr("width", w/2 - barPadding)    
-        .attr("height", function(d) {
-            return d.clicks*3;  //Just the data value
-        });
-        /* tooltip not necessary
-        .on("mouseover", function(d) {
-
-          //Get this bar's x/y values, then augment for the tooltip
-          var xPosition = parseFloat(d3.select(this).attr("x")) ;
-          var yPosition = parseFloat(d3.select(this).attr("y"));
-
-          //Update the tooltip position and value
-          d3.select("#tooltip")
-              //.style("left", xPosition + "px")
-              //.style("top", yPosition + "px")
-              .style("text-align", "center")                    
-              .select("#value")
-              .text(d.clicks);
-     
-          //Show the tooltip
-          d3.select("#tooltip").classed("hidden", false);
-
-        })
-         .on("mouseout", function() {
-              //Hide the tooltip
-              d3.select("#tooltip").classed("hidden", true);
+            var yScale = d3.scale.linear()// for tooltip
+                        .domain([0, d3.max(dataset)])
+                        .range([0, h]);*/
             
-       });*/
+            //Draw graph
+            var svg = d3.select("#data")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+            
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) {
+                    return i * (w/2) + barPadding;
+                })
+                .attr("y", function(d) {
+                    return h - ( d.clicks*3 );  //Height minus data value
+                })
+                .attr("width", w/2 - barPadding)    
+                .attr("height", function(d) {
+                    return d.clicks*3;  //Just the data value
+                });
+            //end graph
 
-    svg.selectAll("text")
-       .data(dataset)
-       .enter()
-       .append("text")
-       .text(function(d) {
-            return d.choice;
-       })
-       .attr("text-anchor", "middle")
-       .attr("x", function(d, i) {
-            return i * (w / 2) + (w / dataset.length - barPadding) / 2;
-       })
-       .attr("y", function(d) {
-            return h - (d.clicks*3) + 150;
-        })
-       .attr("font-family", "sans-serif")
-       .attr("font-size", "5em")
-       .attr("fill", "white");
-   //});
-    var more = d3.select("#explain")
-                .append("p")
-    more.select("p")
-      .data(dataset)
-      .enter()
-      .append("p")
-      .text(function(d, i){
-        return d.choice + ": " + d.clicks + " clicks out of a total " + d.outOf + " possible clicks.";
-      })
-      .style("text-align", "center")
-      .style("font-family", "sans-serif"); 
-  });
+            //text inside bar
+            svg.selectAll("text")
+               .data(dataset)
+               .enter()
+               .append("text")
+               .text(function(d) {
+                    return d.choice;
+               })
+               .attr("text-anchor", "middle")
+               .attr("x", function(d, i) {
+                    return i * (w / 2) + (w / dataset.length - barPadding) / 2;
+               })
+               .attr("y", function(d) {
+                    return h - (d.clicks*3) + 150;
+                })
+               .attr("font-family", "sans-serif")
+               .attr("font-size", "5em")
+               .attr("fill", "#ccc");
+            //end text inside bar
+
+
+
+            //tooltip
+            /*svg.on("mouseover", function(d) {
+
+              //Get this bar's x/y values, then augment for the tooltip
+              var xPosition = parseFloat(d3.select(this).attr("x")) ;
+              var yPosition = parseFloat(d3.select(this).attr("y"));
+
+              //Update the tooltip position and value
+              d3.select("#tooltip")
+                  //.style("left", xPosition + "px")
+                  //.style("top", yPosition + "px")
+                  .style("text-align", "center")
+                  .style("bottom", h + "px")                    
+                  .select("#value")
+                  .text(d.clicks)
+                  //.style("color", "red");
+         
+              //Show the tooltip
+              d3.select("#tooltip").classed("hidden", false);
+
+            })
+             .on("mouseout", function() {
+                  //Hide the tooltip
+                  d3.select("#tooltip").classed("hidden", true);  
+            });*/
+            //end tooltip
+
+            //});
+
+
+            //stats below
+            var more = d3.select("#explain")
+                        .append("p")
+            more.select("p")
+              .data(dataset)
+              .enter()
+              .append("p")
+              .text(function(d, i){
+                return d.choice + ": " + d.clicks + " clicks out of a total " + d.outOf + " possible clicks.";
+              })
+              .style("text-align", "center")
+              .style("font-family", "sans-serif");
+            // end stats below
+
+
+  
+
+  });//END JSON FUNCTION
+
   </script>
 </body>
