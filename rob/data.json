@@ -1,1 +1,4 @@
-[{"choice": "X","clicks": "120","outOf": "200"},{"choice": "Y","clicks": "99","outOf": "211"}]
+[
+	{"choice": "X","clicks": "50","outOf": "200"},
+	{"choice": "Y","clicks": "120","outOf": "211"}
+	]
