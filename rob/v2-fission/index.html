@@ -8,7 +8,7 @@
 	}
 	.chart div {
 	  font: 10px sans-serif;
-	  /*background-color: #2c3e50;*/
+	  background-color: #2c3e50;
 	  text-align: right;
 	  padding: 3px;
 	  margin: 3px;
@@ -17,26 +17,24 @@
 	.chart div:hover{
 		background-color: #3498db;
 	}
+	/*
 	#tooltip {
-        position: absolute;
-        width: 200px;
-        height: auto;
-        padding: 10px;
-        background-color: white;
+        position: relative;
+        background-color: #2c3e50;
         pointer-events: none;
-	}
+        width:50%;
+   		float:left;
 
+	}
 	#tooltip.hidden {
 	        display: none;
 	}
-
 	#tooltip p {
-			color:black;
-	        margin: 0;
+			color:white;
 	        font-family: sans-serif;
-	        font-size: 16px;
-	        line-height: 20px;
+	        font-size: 1em;
 	}
+	*/
 </style>
 </head>
 <body>
@@ -74,26 +72,58 @@
 		    }) //take out for transition
 		    .text(function(d) { return d.Complete + "/" + d.Total; })
 		    .style("color","white")
-		   	.style("height", "25px")
-		   	.style("font-size", "1.5em")
-		   	.style("background-color", function(d){
+		   	.style("height", "23px")
+		   	.style("font-size", "1.5em")		 	
+		   	
+		   	//change color on hover
+		   	/*.style("background-color", function(d){
 		   		return d.Color;
-		   	})
+		   	})*/
 		   	.on("mouseover", function(d){
 		   		//console.log(d.Complete);
+
+		   		//percent
+		   		d3.select(this)
+		   			.text(function(d){
+			   		  	//return percent clicks as tooltip
+			   		  	var percent = d.Complete/d.Total;
+			   		  	round = Math.round(percent*100);
+			   		  	return round + "%";
+			   		  })
+		   		
+		   		//tooltip
+		   		/*
 		   		d3.select("#tooltip")
 		   		  .select("#text")
-		   		  .text(d.Complete + " out of a total possible " + d.Total + " for " + d.Color)
-				d3.select("#tooltip").classed("hidden", false)
-				d3.select(this).style("background-color","black")
+		   		  .text(function(){
+		   		  	//return percent clicks as tooltip
+		   		  	var percent = d.Complete/d.Total;
+		   		  	round = Math.round(percent*100);
+		   		  	return round + "%";
+		   		  })
+				d3.select("#tooltip").classed("hidden", false)*/
+				
+				//change color on hover
+				//d3.select(this).style("background-color","black")
 			})
 		   	.on("mouseout", function(d){
-		   		console.log("OUT")
-		   		d3.select("#tooltip").classed("hidden", true)
-		   		d3.select(this).style("background-color", function(d){
+		   		//console.log("OUT")
+		   		
+		   		//percent
+		   		d3.select(this)
+		   			.text(function(d){
+			   		  	return d.Complete + "/" + d.Total;
+			   		  })
+		   		
+		   		//tooltip
+		   		/*d3.select("#tooltip").classed("hidden", true)*/
+		   		
+		   		//change color on hover
+		   		/*d3.select(this).style("background-color", function(d){
 		   			return d.Color;
-		   		})
+		   		})*/
 		   	})
+		   	
 		   	//Transition 
 		   	/*.transition()
 				.duration(1000)
