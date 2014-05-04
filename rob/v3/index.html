@@ -60,7 +60,7 @@
 		    })
 		    .text(function(d) {
 		    	//write out text in box
-		    	return d.Complete + "/" + d.Total;
+		    	return d.Color + ": " + d.Complete + "/" + d.Total;
 		    })
 		    //style the text
 		    .style("color","white")
@@ -73,15 +73,15 @@
 			   		  	//be sure to round it so there aren't crazy fractions
 			   		  	var percent = d.Complete/d.Total;
 			   		  	round = Math.round(percent*100);
-			   		  	return round + "%";
+			   		  	return d.Color + ": " + round + "%";
 			   		  })
 			})
 		   	.on("mouseout", function(d){
 		   		//on not hover return to original text
 		   		d3.select(this)
 		   			.text(function(d){
-			   		  	return d.Complete + "/" + d.Total;
-			   		  })
+		    			return d.Color + ": " + d.Complete + "/" + d.Total;
+			   		})
 		   	})
 	});// end JSON function
 	</script>
