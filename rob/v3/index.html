@@ -16,17 +16,26 @@
 	  padding: 3px;
 	  margin: 3px;
 	  color: white;
+	  font-size:1.8em;
 	}
 	.chart div:hover{
 		background-color: #3498db;
+	}
+	#color{
+		font-weight: 900;
+	}
+	@media screen and (max-width: 800px){
+		.chart div{
+			font-size:1em;
+			vertical-align: text-bottom;
+		}
 	}
 </style>
 </head>
 <body>
 	<!-- chart to render d3 -->
 	<div class="chart"></div>
-	<!-- import local d3 -->
-	<script src="d3/d3.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<!-- begin d3 script -->
 	<script>
 	var data;
@@ -60,27 +69,25 @@
 		    })
 		    .text(function(d) {
 		    	//write out text in box
-		    	return d.Color + ": " + d.Complete + "/" + d.Total;
+		    	return d.abtest + ": " + d.Complete + "/" + d.Total;
 		    })
 		    //style the text
-		    .style("color","white")
-		   	.style("height", "23px")
-		   	.style("font-size", "1.5em")		 	
+		   	//.style("height", "23px")
+		   	//on hover return the percent of clicks		 	
 		   	.on("mouseover", function(d){
-		   		//on hover return the percent of clicks
 		   		d3.select(this)
 		   			.text(function(d){
 			   		  	//be sure to round it so there aren't crazy fractions
 			   		  	var percent = d.Complete/d.Total;
 			   		  	round = Math.round(percent*100);
-			   		  	return d.Color + ": " + round + "%";
+			   		  	return d.abtest + ": " + round + "%";
 			   		  })
 			})
 		   	.on("mouseout", function(d){
 		   		//on not hover return to original text
 		   		d3.select(this)
 		   			.text(function(d){
-		    			return d.Color + ": " + d.Complete + "/" + d.Total;
+		    			return d.abtest + ": " + d.Complete + "/" + d.Total;
 			   		})
 		   	})
 	});// end JSON function
